@@ -313,17 +313,43 @@ function renderTime() {
   $("timeFill").style.transform = `scaleX(${state.timeLeft / TIME_LIMIT})`;
 }
 let lastTick = performance.now();
-function tick(now) {
-  // Cap dt so a backgrounded tab (rAF paused) doesn't drain the clock in one jump.
-  const dt = Math.min(now - lastTick, 250) / 1000;
+let catchUp = false;
+let windowBlurred = false;
+let bgClock = 0;
+
+function pageAway() {
+  return document.hidden || windowBlurred;
+}
+function advanceClock(now) {
+  let elapsed = now - lastTick;
+  // A focused, visible tab still ignores a single long hitch. Switching windows
+  // stops rAF, so that gap is real time — including the frame after you return.
+  const away = pageAway();
+  if (!away && !catchUp && elapsed > 250) elapsed = 250;
+  if (!away) catchUp = false;
   lastTick = now;
-  if (state.phase === "playing" && state.timerRunning) {
+  const dt = Math.max(0, elapsed) / 1000;
+  if (dt > 0 && state.phase === "playing" && state.timerRunning) {
     state.timeLeft = Math.max(0, state.timeLeft - dt);
     if (state.timeLeft === 0) timeUp();
   }
   renderTime();
+}
+function tick(now) {
+  advanceClock(now);
   requestAnimationFrame(tick);
 }
+function syncBackgroundClock() {
+  clearInterval(bgClock);
+  bgClock = 0;
+  if (!pageAway()) return;
+  catchUp = true;
+  // Background timers are throttled; the timestamp delta still matches wall time.
+  bgClock = setInterval(() => advanceClock(performance.now()), 1000);
+}
+document.addEventListener("visibilitychange", syncBackgroundClock);
+window.addEventListener("blur", () => { windowBlurred = true; syncBackgroundClock(); });
+window.addEventListener("focus", () => { windowBlurred = false; syncBackgroundClock(); });
 
 function centerIn(el) {
   const s = $("scene").getBoundingClientRect(), r = el.getBoundingClientRect();
