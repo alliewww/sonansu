@@ -1,4 +1,5 @@
 const T = window.I18N[document.documentElement.lang] || window.I18N["zh-Hant"];
+try { localStorage.setItem("wob-lang", document.documentElement.lang); } catch (e) {}
 const TYPES = T.types;
 const CATS = T.cats;
 const REFLECT = T.reflect;

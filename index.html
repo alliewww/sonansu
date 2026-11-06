@@ -4,7 +4,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Default locale is zh-Hant (original Traditional Chinese site). EN is /en/, JA is /ja/. x-default points at /. -->
+  <!--
+    Crawlable default at / is always zh-Hant (hreflang + x-default). EN=/en/, JA=/ja/.
+    Humans only: first visit to / with no wob-lang in localStorage may client-side
+    replace() to /en/ or /ja/ from navigator.languages. Known crawler UAs are skipped
+    so Googlebot/Bingbot keep the Chinese document. No HTTP redirect. Manual switcher
+    writes wob-lang and therefore wins on later visits to /.
+  -->
   <title>そう...ソーナンス！</title>
   <meta name="description" content="用果然翁的雙倍奉還與鏡面反射，判斷對手招式是物理還是特殊的限時測驗。">
   <link rel="canonical" href="https://alliewww.github.io/sonansu/">
@@ -21,6 +27,32 @@
   <meta property="og:description" content="用果然翁的雙倍奉還與鏡面反射，判斷對手招式是物理還是特殊的限時測驗。">
   <meta property="og:url" content="https://alliewww.github.io/sonansu/">
   <link rel="stylesheet" href="style.css">
+  <script>
+    (function () {
+      /* First-visit locale hint for humans on / only. Crawlers keep this zh-Hant HTML. */
+      var CRAWLER = /googlebot|google-inspectiontool|bingbot|bingpreview|yandex(?:bot|images)?|baiduspider|sogou|duckduckbot|slurp|facebookexternalhit|facebot|twitterbot|linkedinbot|applebot|pingdom|gtmetrix|lighthouse|chrome-lighthouse|pagespeed|semrushbot|ahrefsbot|mj12bot|dotbot|petalbot|bytespider|ia_archiver|screaming frog|uptimerobot|discordbot|telegrambot|whatsapp|previewbot|qwantify|seznambot/i;
+      var ua = navigator.userAgent || "";
+      if (!ua || CRAWLER.test(ua)) return;
+      var chosen;
+      try { chosen = localStorage.getItem("wob-lang"); } catch (e) { return; }
+      if (chosen) return;
+      var tags = [];
+      if (navigator.languages) for (var i = 0; i < navigator.languages.length; i++) tags.push(navigator.languages[i]);
+      if (navigator.language) tags.push(navigator.language);
+      var loc = "zh-Hant";
+      for (var j = 0; j < tags.length; j++) {
+        var primary = String(tags[j] || "").toLowerCase().replace(/_/g, "-").split("-")[0];
+        if (primary === "ja") { loc = "ja"; break; }
+        if (primary === "en") { loc = "en"; break; }
+        if (primary === "zh") { loc = "zh-Hant"; break; }
+      }
+      try { localStorage.setItem("wob-lang", loc); } catch (e) {}
+      if (loc === "zh-Hant") return;
+      var path = location.pathname.replace(/index\.html$/, "");
+      if (!path.endsWith("/")) path += "/";
+      location.replace(location.origin + path + loc + "/");
+    })();
+  </script>
   <script>
     (function () {
       var map = { "zh-Hant": "", en: "en/", ja: "ja/" };

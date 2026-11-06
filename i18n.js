@@ -1,5 +1,5 @@
-/* UI copy for zh-Hant (default / x-default), en, and ja.
-   Default locale is zh-Hant because that is the original site language. */
+/* UI copy for zh-Hant (crawlable default / x-default at /), en, and ja.
+   Humans may be sent from / to /en/ or /ja/ on first visit via navigator.languages. */
 window.I18N = {
   "zh-Hant": {
     types: {
@@ -50,7 +50,7 @@ window.I18N = {
         <h4>二、個人資料之蒐集</h4>
         <p>本網站不要求使用者註冊或登入，亦不主動蒐集足以識別身分之個人資料（包括但不限於姓名、電子郵件、電話號碼或裝置識別碼）。本網站並未設置會員制度，亦未委託第三方進行廣告投放或流量分析。</p>
         <h4>三、本機資料之處理</h4>
-        <p>為於同一裝置上顯示最高紀錄，本網站僅於使用者之瀏覽器本機儲存空間（Web Storage / localStorage）寫入一項分數資料，鍵名為 wob-best。該資料僅存於使用者裝置，不會傳輸至本網站營運者之伺服器。介面語言以網址路徑區分（/ 為繁體中文、/en/ 為英文、/ja/ 為日文），不以 Cookie 記錄語言偏好。</p>
+        <p>為於同一裝置上顯示最高紀錄與記住語言選擇，本網站僅於使用者之瀏覽器本機儲存空間（Web Storage / localStorage）寫入資料，鍵名為 wob-best（最高分數）與 wob-lang（語言：zh-Hant、en 或 ja）。該資料僅存於使用者裝置，不會傳輸至本網站營運者之伺服器。公開網址以路徑區分語言（/ 為繁體中文、/en/ 為英文、/ja/ 為日文），供搜尋引擎收錄；不以 Cookie 記錄語言偏好。搜尋引擎爬蟲不會依瀏覽器語言被送往其他路徑。</p>
         <h4>四、Cookie 與追蹤技術</h4>
         <p>本網站不使用 Cookie，亦不使用分析、廣告或跨網站追蹤技術。</p>
         <h4>五、第三方傳輸</h4>
@@ -131,7 +131,7 @@ window.I18N = {
         <h4>2. Personal data</h4>
         <p>This site does not require registration or sign-in and does not collect information that identifies you (including name, email, phone number, or device identifiers). There is no membership system, and no third party is engaged for ads or analytics.</p>
         <h4>3. Local data</h4>
-        <p>To show your high score on the same device, this site writes one score value in your browser's local storage under the key wob-best. That value stays on your device and is not sent to our servers. Interface language is selected by URL path (/ for Traditional Chinese, /en/ for English, /ja/ for Japanese). Language preference is not stored in a cookie.</p>
+        <p>To show your high score and remember a language choice on the same device, this site writes local storage keys wob-best (score) and wob-lang (zh-Hant, en, or ja). Those values stay on your device and are not sent to our servers. Public URLs identify language by path (/ Traditional Chinese, /en/ English, /ja/ Japanese) so search engines can crawl each locale. Language is not stored in a cookie. Crawlers are not sent to another path based on browser language.</p>
         <h4>4. Cookies and tracking</h4>
         <p>This site does not use cookies, analytics, advertising, or cross-site tracking.</p>
         <h4>5. Third-party requests</h4>
@@ -212,7 +212,7 @@ window.I18N = {
         <h4>2. 個人情報の収集</h4>
         <p>本サイトは登録やログインを求めず、氏名、メールアドレス、電話番号、端末識別子など個人を特定できる情報を自ら収集しません。会員制度はなく、広告配信やアクセス解析を第三者に委託していません。</p>
         <h4>3. 端末内データ</h4>
-        <p>同一端末で最高記録を表示するため、ブラウザのローカルストレージ（Web Storage / localStorage）に wob-best というキーで得点を1件保存します。このデータは利用者の端末内のみにあり、運営者のサーバへは送信しません。表示言語はURLのパス（/ が繁体字中国語、/en/ が英語、/ja/ が日本語）で決まり、Cookie には言語設定を保存しません。</p>
+        <p>同一端末で最高記録と表示言語を覚えるため、ブラウザのローカルストレージに wob-best（得点）と wob-lang（言語：zh-Hant、en、ja）を保存します。データは端末内のみで、運営者のサーバへは送りません。公開URLはパスで言語を示します（/ が繁体字中国語、/en/ が英語、/ja/ が日本語）。Cookie には言語を保存しません。検索クローラはブラウザ言語によって別パスへ送られません。</p>
         <h4>4. Cookie と追跡</h4>
         <p>本サイトは Cookie を使用せず、分析、広告、クロスサイト追跡も行いません。</p>
         <h4>5. 第三者への通信</h4>
