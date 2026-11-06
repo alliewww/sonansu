@@ -19,15 +19,15 @@ window.I18N = {
     timeUp: "時間到！",
     penalty: n => `−${n} 秒`,
     coverTitle: "拜託你了果然翁",
-    rule1: () => '物理招式用<b class="c">雙倍奉還</b>、特殊招式用<b class="m">鏡面反射</b>反彈回去！',
+    rule1: () => '物理招式使用<b class="c">雙倍奉還</b>、特殊招式使用<b class="m">鏡面反射</b>',
     rule2: (limit, penalty) => `限時 <b>${limit} 秒</b>，答錯扣 <b>${penalty} 秒</b>`,
-    rule3: () => "動畫與結果顯示時<b>暫停計時</b>",
+    rule3: () => "一起來當果然翁(>﹏<)",
     bestRecord: n => `最高紀錄：${n} 題`,
     start: "開始挑戰",
     replay: "再玩一次",
     next: "下一題 →",
-    hit: "反擊成功！",
-    miss: "反擊失敗！",
+    hit: "成功(>﹏<)",
+    miss: "失敗了...",
     streak: n => `🔥 ${n} 連勝中`,
     moveMeta: (mon, power) => `${mon} 的招式${power ? `・威力 ${power}` : ""}`,
     catMove: cat => `${cat}招式`,
@@ -64,7 +64,7 @@ window.I18N = {
         <h4>一、遊戲數值與名稱</h4>
         <p>本網站所使用之寶可夢名稱、屬性、招式名稱、招式威力、物理／特殊分類，以及各寶可夢可學會之招式清單，係整理自公開資料庫 <a href="https://pokeapi.co/" target="_blank" rel="noopener noreferrer">PokeAPI</a>（https://pokeapi.co/）。該資料庫之內容由其提供者維護，本網站不保證其完整、正確或即時。</p>
         <h4>二、圖像資料</h4>
-        <p>畫面所顯示之寶可夢圖像，係透過 PokeAPI Sprites 專案所提供之官方繪圖連結載入（<a href="https://github.com/PokeAPI/sprites" target="_blank" rel="noopener noreferrer">github.com/PokeAPI/sprites</a>）。圖像之著作權仍歸屬於原權利人，本網站並未取得授權，亦未對圖像主張任何權利。</p>
+        <p>畫面所顯示之寶可夢圖像，係透過 PokeAPI Sprites 專案所提供之對戰用靜態正面圖與背面圖載入（<a href="https://github.com/PokeAPI/sprites" target="_blank" rel="noopener noreferrer">github.com/PokeAPI/sprites</a>）。圖像之著作權仍歸屬於原權利人，本網站並未取得授權，亦未對圖像主張任何權利。</p>
         <h4>三、分類依據</h4>
         <p>招式之物理攻擊或特殊攻擊分類，係依寶可夢系列自第四世代起所採用之官方招式分類。本網站不處理會因對戰狀況而改變分類之招式。</p>
         <h4>四、引用目的</h4>
@@ -100,15 +100,15 @@ window.I18N = {
     timeUp: "Time's up!",
     penalty: n => `−${n}s`,
     coverTitle: "Please, Wobbuffet!",
-    rule1: () => 'Bounce <b>Physical</b> moves with <b class="c">Counter</b> and <b>Special</b> moves with <b class="m">Mirror Coat</b>!',
+    rule1: () => 'Use <b class="c">Counter</b> for Physical moves and <b class="m">Mirror Coat</b> for Special moves',
     rule2: (limit, penalty) => `<b>${limit}s</b> on the clock. Wrong answers cost <b>${penalty}s</b>.`,
-    rule3: () => "The timer <b>pauses</b> during animations and result screens.",
+    rule3: () => "Let's be Wobbuffet together (>﹏<)",
     bestRecord: n => `Best: ${n}`,
     start: "Start",
     replay: "Play again",
     next: "Next →",
-    hit: "Countered!",
-    miss: "It failed!",
+    hit: "Success (>﹏<)",
+    miss: "It failed...",
     streak: n => `🔥 ${n} streak`,
     moveMeta: (mon, power) => `${mon}'s move${power ? ` · Power ${power}` : ""}`,
     catMove: cat => `${cat} move`,
@@ -145,7 +145,7 @@ window.I18N = {
         <h4>1. Game values and names</h4>
         <p>Pokémon names, types, move names, move power, the physical/special split, and each species' damaging move list are compiled from the public <a href="https://pokeapi.co/" target="_blank" rel="noopener noreferrer">PokeAPI</a> (https://pokeapi.co/). That database is maintained by its providers. This site does not guarantee completeness, accuracy, or timeliness.</p>
         <h4>2. Images</h4>
-        <p>Pokémon images are loaded from official artwork URLs provided by the PokeAPI Sprites project (<a href="https://github.com/PokeAPI/sprites" target="_blank" rel="noopener noreferrer">github.com/PokeAPI/sprites</a>). Copyright remains with the original rights holders. This site is not licensed to use the images and claims no rights in them.</p>
+        <p>Pokémon images are loaded from the PokeAPI Sprites project's in-battle static front and back sprites (<a href="https://github.com/PokeAPI/sprites" target="_blank" rel="noopener noreferrer">github.com/PokeAPI/sprites</a>). Copyright remains with the original rights holders. This site is not licensed to use the images and claims no rights in them.</p>
         <h4>3. Move categories</h4>
         <p>Physical vs. special categories follow the official split used in the Pokémon series from Generation IV onward. Moves whose category depends on battle conditions are not used.</p>
         <h4>4. Purpose</h4>
@@ -181,15 +181,15 @@ window.I18N = {
     timeUp: "タイムアップ！",
     penalty: n => `−${n}秒`,
     coverTitle: "お願い、ソーナンス！",
-    rule1: () => '物理技は<b class="c">カウンター</b>、特殊技は<b class="m">ミラーコート</b>で跳ね返す！',
+    rule1: () => '物理技は<b class="c">カウンター</b>、特殊技は<b class="m">ミラーコート</b>',
     rule2: (limit, penalty) => `制限時間 <b>${limit}秒</b>。不正解は <b>${penalty}秒</b>減。`,
-    rule3: () => "アニメーションと結果表示のあいだは<b>タイマー停止</b>",
+    rule3: () => "いっしょにソーナンスになろう(>﹏<)",
     bestRecord: n => `最高記録：${n}問`,
     start: "スタート",
     replay: "もういちど",
     next: "つぎへ →",
-    hit: "反撃成功！",
-    miss: "失敗……！",
+    hit: "成功(>﹏<)",
+    miss: "失敗した…",
     streak: n => `🔥 ${n} れんしょう`,
     moveMeta: (mon, power) => `${mon}の技${power ? `・威力 ${power}` : ""}`,
     catMove: cat => `${cat}技`,
@@ -226,7 +226,7 @@ window.I18N = {
         <h4>1. ゲーム数値と名称</h4>
         <p>ポケモン名、タイプ、技名、威力、物理／特殊分類、および各種が覚える攻撃技の一覧は、公開データベース <a href="https://pokeapi.co/" target="_blank" rel="noopener noreferrer">PokeAPI</a>（https://pokeapi.co/）から整理しています。内容は提供者の管理下にあり、本サイトはその完全性・正確性・即時性を保証しません。</p>
         <h4>2. 画像</h4>
-        <p>表示画像は PokeAPI Sprites プロジェクトが提供する公式イラストのURLから読み込みます（<a href="https://github.com/PokeAPI/sprites" target="_blank" rel="noopener noreferrer">github.com/PokeAPI/sprites</a>）。著作権は原権利者に帰属し、本サイトは利用許諾を受けておらず、画像について権利を主張しません。</p>
+        <p>表示画像は PokeAPI Sprites プロジェクトが提供する対戦用の静止正面・背面スプライトから読み込みます（<a href="https://github.com/PokeAPI/sprites" target="_blank" rel="noopener noreferrer">github.com/PokeAPI/sprites</a>）。著作権は原権利者に帰属し、本サイトは利用許諾を受けておらず、画像について権利を主張しません。</p>
         <h4>3. 分類の根拠</h4>
         <p>技の物理／特殊は、ポケットモンスターシリーズが第4世代以降採用している公式分類に従います。対戦状況で分類が変わる技は扱いません。</p>
         <h4>4. 利用目的</h4>

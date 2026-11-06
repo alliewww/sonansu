@@ -5,7 +5,7 @@ const CATS = T.cats;
 const REFLECT = T.reflect;
 const TIME_LIMIT = 60;
 const PENALTY = 10;
-const VERSION = "26.1105.21";
+const VERSION = "105.1106.10";
 const MOVES = window.MOVES.map(([name, type, cat, power], i) => ({
   name: (window.MOVE_I18N && window.MOVE_I18N[i]) || name,
   type, cat, power
@@ -19,7 +19,8 @@ const MONS = window.MONS.map(([id, name, types, moves]) => ({
 const $ = id => document.getElementById(id);
 const rand = arr => arr[Math.floor(Math.random() * arr.length)];
 const reduceMotion = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
-const spriteUrl = id => `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
+const SPRITE_ROOT = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";
+const spriteUrl = (id, back) => `${SPRITE_ROOT}${back ? "back/" : ""}${id}.png`;
 const FALLBACK = "data:image/svg+xml;utf8," + encodeURIComponent(
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#fff" stroke="#222" stroke-width="5"/><path d="M6 50a44 44 0 0 1 88 0z" fill="#ff4d4d" stroke="#222" stroke-width="5"/><circle cx="50" cy="50" r="13" fill="#fff" stroke="#222" stroke-width="5"/></svg>`);
 
@@ -47,7 +48,8 @@ function fillUpcoming() {
   while (upcoming.length < 3) {
     const round = generateRound((upcoming.at(-1) || state.round)?.mon.id);
     const im = new Image();
-    im.src = spriteUrl(round.mon.id);
+    im.crossOrigin = "anonymous";
+    im.src = spriteUrl(round.mon.id, false);
     preloaded.push(im);
     if (preloaded.length > 8) preloaded.shift();
     upcoming.push(round);
@@ -60,12 +62,75 @@ function takeRound() {
   return round;
 }
 
-function setSprite(img, url) {
+function cropSprite(img) {
+  const w = img.naturalWidth, h = img.naturalHeight;
+  if (!w || !h) return null;
+  const canvas = document.createElement("canvas");
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(img, 0, 0);
+  let pixels;
+  try { pixels = ctx.getImageData(0, 0, w, h).data; }
+  catch { return null; }
+  let top = h, left = w, right = -1, bottom = -1;
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      if (pixels[(y * w + x) * 4 + 3] < 16) continue;
+      if (y < top) top = y;
+      if (y > bottom) bottom = y;
+      if (x < left) left = x;
+      if (x > right) right = x;
+    }
+  }
+  if (right < 0) return null;
+  left = Math.max(0, left - 1);
+  top = Math.max(0, top - 1);
+  right = Math.min(w - 1, right + 1);
+  bottom = Math.min(h - 1, bottom + 1);
+  const cw = right - left + 1, ch = bottom - top + 1;
+  if (cw === w && ch === h) return null;
+  const out = document.createElement("canvas");
+  out.width = cw;
+  out.height = ch;
+  const octx = out.getContext("2d");
+  octx.imageSmoothingEnabled = false;
+  octx.drawImage(canvas, left, top, cw, ch, 0, 0, cw, ch);
+  return out.toDataURL("image/png");
+}
+function setSprite(img, urls) {
+  const list = (Array.isArray(urls) ? urls : [urls]).slice();
+  const token = (img._spriteToken = (img._spriteToken || 0) + 1);
   img.classList.remove("loaded");
-  img.onload = () => { if (img.naturalWidth) img.classList.add("loaded"); };
-  img.onerror = () => { img.onerror = null; img.src = FALLBACK; };
-  img.src = url;
-  if (img.complete && img.naturalWidth) img.classList.add("loaded");
+  img.crossOrigin = "anonymous";
+  const show = () => {
+    if (img._spriteToken !== token) return;
+    const url = list.shift();
+    if (!url) {
+      img.onload = img.onerror = null;
+      img.src = FALLBACK;
+      img.classList.add("loaded");
+      return;
+    }
+    img.onload = () => {
+      if (img._spriteToken !== token) return;
+      if (!img.naturalWidth) { show(); return; }
+      if (!img.dataset.trimmed) {
+        const cropped = cropSprite(img);
+        if (cropped) {
+          img.dataset.trimmed = "1";
+          img.src = cropped;
+          return;
+        }
+      }
+      img.classList.add("loaded");
+    };
+    img.onerror = () => show();
+    img.dataset.trimmed = "";
+    img.src = url;
+  };
+  show();
 }
 function spriteReady(img, ms) {
   return new Promise(r => {
@@ -144,13 +209,12 @@ function fly(cls, fromEl, toEl, ms) {
 }
 function shake(el, color) {
   const img = el.querySelector("img");
-  const flip = el.id === "me" ? " scaleX(-1)" : "";
   img.animate([
-    { transform: "translateX(0)" + flip, filter: "drop-shadow(0 8px 10px rgba(0,0,0,.4))" },
-    { transform: "translateX(-8px)" + flip, filter: `drop-shadow(0 0 14px ${color}) brightness(1.6)` },
-    { transform: "translateX(8px)" + flip },
-    { transform: "translateX(-5px)" + flip, filter: `drop-shadow(0 0 14px ${color}) brightness(1.6)` },
-    { transform: "translateX(0)" + flip, filter: "drop-shadow(0 8px 10px rgba(0,0,0,.4))" }
+    { transform: "translateX(0)", filter: "drop-shadow(0 2px 0 rgba(0,0,0,.35))" },
+    { transform: "translateX(-8px)", filter: `drop-shadow(0 0 14px ${color}) brightness(1.6)` },
+    { transform: "translateX(8px)" },
+    { transform: "translateX(-5px)", filter: `drop-shadow(0 0 14px ${color}) brightness(1.6)` },
+    { transform: "translateX(0)", filter: "drop-shadow(0 2px 0 rgba(0,0,0,.35))" }
   ], { duration: 420 });
 }
 
@@ -207,7 +271,7 @@ function newRound() {
     $("foeName").textContent = round.mon.name;
     $("foeId").textContent = "No." + String(round.mon.id).padStart(4, "0");
     $("foeTypes").innerHTML = round.mon.types.map(t => `<span class="type t-${t}">${TYPES[t]}</span>`).join("");
-    setSprite($("foeImg"), spriteUrl(round.mon.id));
+    setSprite($("foeImg"), spriteUrl(round.mon.id, false));
     void game.offsetWidth;
     game.classList.remove("no-trans");
     await Promise.race([spriteReady($("foeImg"), 2500), new Promise(r => { e.wake = r; })]);
@@ -364,19 +428,19 @@ function choose(c) {
       if (!await sleep(300)) return;
       $("dialog").classList.remove("done");
       $("dialogText").innerHTML = T.opponentUsed(mon.name, mv);
-      orbs.push(fly("t-" + move.type, $("foe"), $("me"), 280));
-      if (!await sleep(280)) return;
+      orbs.push(fly("t-" + move.type, $("foe"), $("me"), 200));
+      if (!await sleep(230)) return;
       shake($("me"), ok ? "#fff" : "#ff5c6c");
       if (!await sleep(200)) return;
       $("dialogText").textContent = T.wobUsed(REFLECT[c]);
       if (!await sleep(150)) return;
       if (ok) {
-        orbs.push(fly(c ? "mirror" : "counter", $("me"), $("foe"), 260));
-        if (!await sleep(260)) return;
+        orbs.push(fly(c ? "mirror" : "counter", $("me"), $("foe"), 200));
+        if (!await sleep(230)) return;
         shake($("foe"), c ? "#7fb8ff" : "#ff8a3d");
       }
       $("dialogText").textContent = finalText;
-      await sleep(250);
+      await sleep(350);
     }
   })().then(() => {
     if (e.cancelled) return;
@@ -454,7 +518,7 @@ document.addEventListener("keydown", e => {
 });
 document.addEventListener("click", () => { if (state.animating) skipEncounter(); });
 
-setSprite($("meImg"), spriteUrl(202));
+setSprite($("meImg"), spriteUrl(202, true));
 fillUpcoming();
 window.__wob = { MOVES, MONS, state, generateRound, newRound, choose, startGame, timeUp };
 renderStats();

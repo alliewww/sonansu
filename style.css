@@ -219,14 +219,24 @@
     position: absolute;
     left: 0;
     right: 0;
-    bottom: 10%;
+    bottom: 13%;
     margin: auto;
     width: 100%;
-    height: 92%;
+    height: 82%;
     object-fit: contain;
-    filter: drop-shadow(0 8px 10px rgba(0, 0, 0, .4));
+    object-position: center bottom;
+    filter: drop-shadow(0 2px 0 rgba(0, 0, 0, .35));
+    image-rendering: pixelated;
     border: 0;
     outline: 0;
+  }
+
+  .side.foe img {
+    height: 74%;
+  }
+
+  .side.me img {
+    bottom: 4%;
   }
 
   /* Browsers draw a placeholder border for an <img> with no src, still loading, or broken; keep it invisible until a real image has loaded. */
@@ -234,18 +244,17 @@
     visibility: hidden;
   }
 
-  .side.me img {
-    transform: scaleX(-1);
-  }
-
   .info {
     position: absolute;
     z-index: 2;
+    box-sizing: border-box;
+    width: 10.5rem;
+    height: 4.55rem;
     padding: 6px 10px;
     border-radius: 12px;
     background: rgba(14, 12, 36, .62);
     border: 1px solid var(--border);
-    max-width: 46%;
+    overflow: hidden;
     transition: opacity .3s, transform .3s;
   }
 
@@ -257,13 +266,15 @@
   .info.me-info {
     right: 10px;
     bottom: 12px;
-    text-align: right;
   }
 
   .mon-name {
     font-size: 1.05rem;
     font-weight: 800;
     line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .mon-sub {
@@ -275,11 +286,7 @@
     display: flex;
     gap: 5px;
     margin-top: 4px;
-    flex-wrap: wrap;
-  }
-
-  .me-info .types {
-    justify-content: flex-end;
+    flex-wrap: nowrap;
   }
 
   .type {
@@ -1042,10 +1049,6 @@
     .sheet {
       transition: opacity .2s ease !important;
       transform: none !important;
-    }
-
-    .side.me img {
-      transform: scaleX(-1) !important;
     }
 
     .stat.time.low,
